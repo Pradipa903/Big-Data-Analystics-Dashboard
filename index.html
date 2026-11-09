@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Bisnis — Deteksi Dini Penyakit Padi</title>
+<style>
+:root{--bg:#f4f6f1;--cd:#fff;--tx:#20291f;--mu:#5c6b58;--g:#2c5f2d;--g2:#6b8f47;--au:#c99700;--rd:#b3402a;--bd:#dfe5d8;--tr:#e8ede2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a13;--cd:#1b261c;--tx:#e8efe4;--mu:#a5b5a0;--g:#7fbf80;--g2:#8fb36a;--au:#e8b923;--rd:#e0826e;--bd:#2c3b2d;--tr:#2a382b}}
+:root[data-theme="dark"]{--bg:#121a13;--cd:#1b261c;--tx:#e8efe4;--mu:#a5b5a0;--g:#7fbf80;--g2:#8fb36a;--au:#e8b923;--rd:#e0826e;--bd:#2c3b2d;--tr:#2a382b}
+*{box-sizing:border-box}html,body{margin:0;height:auto}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font:14.5px/1.5 Calibri,"Segoe UI",system-ui,sans-serif;padding:14px}
+.w{max-width:1120px;margin:0 auto}h1{font:700 22px Cambria,Georgia,serif;margin:0}.s{color:var(--mu);margin:2px 0 10px}
+.f{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:10px;align-items:end;padding:8px 0 10px;border-bottom:1px solid var(--bd);margin-bottom:12px}
+label{font-size:12px;color:var(--mu);display:flex;flex-direction:column;gap:2px}
+select,button{background:var(--cd);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:6px 9px;font:inherit}button{cursor:pointer}
+.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px}
+.kc{background:var(--cd);border:1px solid var(--bd);border-top:4px solid var(--g);border-radius:10px;padding:10px 12px}
+.kc small{color:var(--mu);display:block}.kc b{font:700 24px Cambria,Georgia,serif;display:block}.d{font-size:12px}.up{color:var(--rd)}.dn{color:var(--g)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:12px;margin-bottom:12px}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:13px;min-width:0}
+.c h2{font:700 16px Cambria,Georgia,serif;margin:0 0 2px}.c p{margin:0 0 8px;color:var(--mu);font-size:13px}
+.cols{display:flex;gap:10px;align-items:flex-end;height:130px;margin:6px 0}.col{flex:1;text-align:center;font-size:12px;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.col i{display:block;border-radius:6px 6px 0 0;background:var(--g2);opacity:.45}.col.on i{opacity:1;background:var(--g)}.col b{font-size:12px}
+.sl{display:grid;grid-template-columns:1fr 54px;gap:6px;align-items:center;font-size:13px;margin:3px 0}input[type=range]{width:100%}
+.out{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}.out div{background:var(--tr);border-radius:8px;padding:8px;font-size:12px}.out b{display:block;font-size:17px;font-family:Cambria,Georgia,serif}
+.bz{margin-top:8px;padding:8px 10px;border-left:4px solid var(--au);background:var(--tr);border-radius:0 8px 8px 0;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--bd);vertical-align:top}th{color:var(--mu);font-size:12px}
+.tb{overflow-x:auto}.ch{padding:1px 8px;border-radius:10px;font-size:11px;white-space:nowrap;color:#fff}.a{background:var(--g)}.b{background:#7a6aa8}.m{background:#8a8f87}
+.ft{font-size:12px;color:var(--mu);margin-top:8px}
+</style></head><body><div class="w">
+<h1>Dashboard Bisnis: Deteksi Dini Penyakit Padi</h1>
+<p class="s">Food Estate Kalimantan Tengah · KPI untuk mendukung proses pemantauan, diagnosis, mitigasi, dan hasil panen</p>
+<div class="f">
+<label>Tahun<select id="fy"><option value="2023">2023</option><option value="2024">2024</option><option value="2025" selected>2025</option></select></label>
+<label>Wilayah (data BPS tersedia)<select id="fw"></select></label>
+<label>Penyakit<select id="fd"></select></label>
+<label>Proses bisnis<select id="fp"></select></label>
+<label>Status data<select id="fs"><option value="">Semua</option><option>Tersedia</option><option>Simulasi</option><option>Perlu data</option></select></label>
+<button id="th" type="button">Terang/Gelap</button></div>
+<div class="k" id="kp"></div>
+<div class="g">
+<section class="c"><h2>Risiko iklim per tahun</h2><p>Hari dengan kelembapan >85% (kondisi yang mendukung penyakit jamur)</p><div class="cols" id="c1"></div>
+<h2 style="margin-top:8px">Curah hujan tahunan (mm)</h2><div class="cols" id="c2"></div>
+<div class="bz" id="z1"></div></section>
+<section class="c"><h2>Hasil panen wilayah terpilih</h2><p>Produksi (ton) per tahun — data BPS</p><div class="cols" id="c3"></div>
+<h2 style="margin-top:8px">Produktivitas (ku/ha)</h2><div class="cols" id="c4"></div>
+<div class="bz" id="z2"></div></section></div>
+<div class="g">
+<section class="c"><h2>Simulasi nilai deteksi dini</h2><p>Atur asumsi; hasil dihitung dari produksi wilayah dan tahun terpilih. Ini simulasi, bukan prediksi.</p>
+<div class="sl"><span>Lahan terdampak penyakit (%)</span><input id="s1" type="range" min="0" max="40" value="10"><b id="v1"></b></div>
+<div class="sl"><span>Penurunan hasil pada lahan terdampak (%)</span><input id="s2" type="range" min="0" max="80" value="30"><b id="v2"></b></div>
+<div class="sl"><span>Kerugian yang dapat dicegah deteksi dini (%)</span><input id="s3" type="range" min="0" max="100" value="40"><b id="v3"></b></div>
+<div class="sl"><span>Harga gabah kering giling (Rp/kg), asumsi</span><input id="s4" type="range" min="5000" max="12000" step="250" value="8000"><b id="v4"></b></div>
+<div class="out" id="so"></div><div class="bz" id="z3"></div></section>
+<section class="c"><h2>Keandalan sistem per penyakit</h2><p>Pilih penyakit pada filter di atas. Berdasarkan 883 foto uji model CNN.</p><div id="rl"></div>
+<div class="bz" id="z4"></div><div class="ft">Aturan tindakan adalah usulan: ≥90% peringatan otomatis; 80–90% otomatis + sampel diperiksa ahli; &lt;80% wajib verifikasi ahli.</div></section></div>
+<section class="c"><h2>Katalog KPI per proses bisnis</h2><p>Gunakan filter proses dan status data. “Perlu data” berarti KPI penting tetapi datanya belum dikumpulkan.</p>
+<div class="tb"><table><thead><tr><th>Proses</th><th>KPI</th><th>Arti bagi keputusan</th><th>Nilai saat ini</th><th>Status</th></tr></thead><tbody id="kt"></tbody></table></div></section>
+<p class="ft">Sumber: data cuaca NASA POWER 2023–2025 (1.096 hari), data BPS (hanya wilayah yang tercantum pada hasil run; kirim data_bps.csv lengkap untuk 14 kabupaten/kota), hasil model Assignment II. Foto uji berasal dari dataset terkurasi; kinerja lapangan dapat lebih rendah.</p></div>
+<script>
+var Y={2023:{h:260,p:2325.4,r:247,t:27.0},2024:{h:311,p:2983.8,r:286,t:27.2},2025:{h:336,p:3258.5,r:284,t:26.6}};
+var B={"Kotawaringin Barat":{2023:[155.5,442.6,28.45],2024:[188.8,623.8,33.04],2025:[280.6,1068.2,38.06]},"Kotawaringin Timur":{2023:[8735.4,26099.0,29.88],2024:[9162.5,29745.8,32.46]}};
+var D=["Bacterial Leaf Blight","Brown Spot","Healthy","Hispa","Leaf Blast","Leaf Scald","Narrow Brown Spot","Neck Blast","Sheath Blight","Tungro"];
+var F=[.790,.774,.911,.931,.663,.835,.731,.995,.873,.982];
+var M=[[66,0,1,2,2,6,6,0,2,0],[1,60,4,1,12,0,10,0,1,0],[0,1,77,3,2,0,0,0,1,0],[0,1,2,81,0,1,0,0,1,0],[9,4,1,0,58,4,6,1,3,0],[2,0,0,0,6,96,7,0,4,0],[2,0,0,0,5,5,61,0,3,0],[0,0,0,0,0,0,0,91,0,0],[2,0,0,1,4,0,1,0,79,0],[0,0,0,0,0,3,0,0,0,81]];
+var K=[["Pemantauan lahan","Jumlah foto diterima per minggu","Beban kerja dan cakupan pemantauan",null,"Perlu data"],["Pemantauan lahan","Persentase luas lahan terpantau","Menunjukkan area yang masih buta",null,"Perlu data"],
+["Diagnosis penyakit","Ketepatan identifikasi (F1 macro)","Seberapa dapat diandalkan sebagai penyaring awal","85–90%","Tersedia"],["Diagnosis penyakit","Kecepatan diagnosis","Dari foto ke hasil; 883 foto diproses 11 detik","0,012 detik/foto","Tersedia"],
+["Diagnosis penyakit","Persentase foto perlu verifikasi ahli","Beban kerja ahli agronomi",null,"Perlu data"],["Mitigasi","Waktu deteksi ke penyemprotan (hari)","Makin singkat, makin kecil kerugian",null,"Perlu data"],["Mitigasi","Biaya mitigasi per hektare","Efisiensi anggaran fungisida",null,"Perlu data"],
+["Mitigasi","Kerugian yang dapat dicegah (Rp)","Dasar justifikasi investasi","lihat simulasi","Simulasi"],["Hasil panen","Produktivitas (ku/ha)","Indikator utama kinerja lahan","lihat panel","Tersedia"],["Hasil panen","Pertumbuhan produksi tahunan","Tren pasokan gabah","lihat panel","Tersedia"],
+["Risiko iklim","Hari kelembapan >85%","Peringatan dini kesiapan stok fungisida","260 → 336 hari (2023–2025)","Tersedia"],["Risiko iklim","Curah hujan tahunan","Anomali iklim dan risiko penyakit","2.325 → 3.258 mm","Tersedia"],
+["Data dan TI","Biaya komputasi Spark vs satu mesin","Kapan investasi cluster layak","Spark 2–17× lebih lambat","Tersedia"]];
+var $=function(i){return document.getElementById(i)},n=function(x,d){return x.toLocaleString("id-ID",{maximumFractionDigits:d||0})};
+function opt(id,a){$(id).innerHTML=a.map(function(x){return"<option>"+x+"</option>"}).join("")}
+opt("fw",Object.keys(B));opt("fd",D);opt("fp",["Semua"].concat(K.map(function(r){return r[0]}).filter(function(v,i,a){return a.indexOf(v)==i})));$("fd").value="Leaf Blast";
+function cols(id,items,sel,fm){var mx=Math.max.apply(0,items.map(function(i){return i[1]||0}))||1;$(id).innerHTML=items.map(function(i){return'<div class="col'+(i[0]==sel?" on":"")+'"><b>'+(i[1]==null?"n/a":fm(i[1]))+'</b><i style="height:'+(i[1]==null?3:Math.max(4,i[1]/mx*88))+'px"></i>'+i[0]+"</div>"}).join("")}
+function dl(a,b,inv){if(b==null||a==null)return"";var p=(a-b)/b*100;return'<span class="d '+((p>0)!=!!inv?"up":"dn")+'">'+(p>0?"▲ ":"▼ ")+n(Math.abs(p),1)+"% vs "+(+$("fy").value-1)+"</span>"}
+function render(){var y=+$("fy").value,w=$("fw").value,c=Y[y],pv=Y[y-1],r=B[w][y],rp=B[w][y-1],di=D.indexOf($("fd").value);
+var kp=[["Hari kelembapan >85%",n(c.h)+" hari",pv?dl(c.h,pv.h,1):""],["Curah hujan",n(c.p)+" mm",pv?dl(c.p,pv.p,1):""],["Produksi "+w,r?n(r[1])+" ton":"n/a",r&&rp?dl(r[1],rp[1]):""],["Produktivitas",r?n(r[2],1)+" ku/ha":"n/a",r&&rp?dl(r[2],rp[2]):""],["Ketepatan identifikasi","85–90%",'<span class="d">F1 pada 883 foto uji</span>'],["Kecepatan diagnosis","0,012 dtk/foto",'<span class="d">883 foto dalam 11 detik</span>']];
+$("kp").innerHTML=kp.map(function(k){return'<div class="kc"><small>'+k[0]+"</small><b>"+k[1]+"</b>"+k[2]+"</div>"}).join("");
+cols("c1",[2023,2024,2025].map(function(v){return[v,Y[v].h]}),y,function(v){return n(v)});cols("c2",[2023,2024,2025].map(function(v){return[v,Y[v].p]}),y,function(v){return n(v)});
+cols("c3",[2023,2024,2025].map(function(v){return[v,B[w][v]?B[w][v][1]:null]}),y,function(v){return n(v)});cols("c4",[2023,2024,2025].map(function(v){return[v,B[w][v]?B[w][v][2]:null]}),y,function(v){return n(v,1)});
+$("z1").innerHTML="Hari lembap naik <b>"+n((Y[2025].h-Y[2023].h)/Y[2023].h*100)+"%</b> sejak 2023. Ini indikator risiko (bukan jumlah kasus): siapkan stok dan jadwal pemantauan lebih awal pada tahun basah.";
+$("z2").innerHTML=r&&rp?"Produktivitas "+w+(r[2]>rp[2]?" naik ":" turun ")+"<b>"+n(Math.abs(r[2]-rp[2]),2)+" ku/ha</b> dibanding "+(y-1)+". Data wilayah lain menunggu file BPS lengkap.":"Data "+w+" untuk "+y+" tidak tersedia pada hasil run (n/a).";
+[1,2,3,4].forEach(function(i){$("v"+i).textContent=n(+$("s"+i).value)+(i<4?"%":"")});
+var pr=r?r[1]:0,lo=pr*$("s1").value/100*$("s2").value/100,sv=lo*$("s3").value/100,rp2=function(t){var v=t*1000*$("s4").value;return v>=1e9?"Rp "+n(v/1e9,2)+" miliar":"Rp "+n(v/1e6,1)+" juta"};
+$("so").innerHTML="<div>Produksi terancam<b>"+n(lo,1)+" ton</b></div><div>Nilai kerugian<b>"+rp2(lo)+"</b></div><div>Dapat dicegah<b>"+rp2(sv)+"</b></div>";
+$("z3").innerHTML=r?"Dengan asumsi ini, deteksi dini bernilai sekitar <b>"+rp2(sv)+"</b> per tahun untuk "+w+" ("+y+"). Bandingkan dengan biaya sistem untuk menilai kelayakan.":"Pilih wilayah/tahun dengan data produksi.";
+var tot=M[di].reduce(function(a,b){return a+b}),rc=M[di][di]/tot,top=-1,tn=0;M[di].forEach(function(v,j){if(j!=di&&v>tn){tn=v;top=j}});
+$("rl").innerHTML='<table><tr><td>Skor F1</td><td><b>'+n(F[di]*100)+'%</b></td></tr><tr><td>Penyakit ini terdeteksi benar</td><td><b>'+M[di][di]+" dari "+tot+" foto ("+n(rc*100)+'%)</b></td></tr><tr><td>Paling sering tertukar dengan</td><td><b>'+(tn?D[top]+" ("+tn+" foto)":"tidak ada")+"</b></td></tr></table>";
+var a=F[di]>=.9?["peringatan otomatis","a"]:F[di]>=.8?["otomatis + sampel diperiksa ahli","b"]:["verifikasi ahli wajib","m"];
+$("z4").innerHTML="Usulan tindakan untuk <b>"+D[di]+"</b>: <b>"+a[0]+"</b>."+(tn?" Pasangan prioritas untuk foto tambahan dan pelatihan petugas: "+D[di]+" dan "+D[top]+".":"");
+var fp=$("fp").value,fs=$("fs").value;$("kt").innerHTML=K.filter(function(k){return(fp=="Semua"||k[0]==fp)&&(!fs||k[4]==fs)}).map(function(k){return"<tr><td>"+k[0]+"</td><td><b>"+k[1]+"</b></td><td>"+k[2]+"</td><td>"+(k[3]||"—")+'</td><td><span class="ch '+(k[4]=="Tersedia"?"a":k[4]=="Simulasi"?"b":"m")+'">'+k[4]+"</span></td></tr>"}).join("")}
+["fy","fw","fd","fp","fs","s1","s2","s3","s4"].forEach(function(i){$(i).addEventListener("input",render)});
+$("th").onclick=function(){var d=document.documentElement,dk=d.getAttribute("data-theme")?d.getAttribute("data-theme")==="dark":matchMedia("(prefers-color-scheme:dark)").matches;d.setAttribute("data-theme",dk?"light":"dark")};render();
+</script></body></html>
