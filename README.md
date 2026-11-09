@@ -15,5 +15,4 @@ Repositori ini berisi kode sumber untuk halaman statis *Dashboard* KPI (Key Perf
 - Hasil evaluasi model *Convolutional Neural Network* (CNN).
 
 ## Akses Dashboard
-Anda dapat mengakses dashboard interaktif ini secara langsung melalui tautan berikut:
-[Tulis tautan GitHub Pages atau Netlify Anda di sini]
+Anda dapat mengakses dashboard interaktif ini secara langsung melalui tautan berikut: https://pradipa903.github.io/Big-Data-Analystics-Dashboard/
